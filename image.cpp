@@ -1,6 +1,6 @@
 #include "image.h"
 
-void line(int x0, int y0, int x1, int y1, QImage &image, QColor color) {
+void line(QImage& image, int x0, int y0, int x1, int y1, QColor color) {
     bool steep = false;
     if (std::abs(x0 - x1) < std::abs(y0 - y1)) {
         std::swap(x0, y0);
@@ -49,21 +49,26 @@ void Image::setVertices(const std::vector<Vertex> &vertices)
     this->vertices = vertices;
 }
 
-void Image::paint()
+void drawFace(QImage& img, const Face& f, QColor color)
 {
     int w = img.width() / 2;
     int h = img.height() / 2;
+    QVector<Vertex> face = f.getVector();
+    for (int i=0; i<3; i++) {
+        Vertex v0 = face[i];
+        Vertex v1 = face[(i + 1) % 3];
+        int x0 = (v0.x + 1) * w;
+        int y0 = (v0.y + 1) * h;
+        int x1 = (v1.x + 1) * w;
+        int y1 = (v1.y + 1) * h;
+        line(img, x0, y0, x1, y1, color);
+    }
+}
+
+void Image::paint()
+{
     for (const Face& f : faces) {
-        QVector<Vertex> face = f.getVector();
-        for (int i=0; i<3; i++) {
-            Vertex v0 = face[i];
-            Vertex v1 = face[(i + 1) % 3];
-            int x0 = (v0.x + 1) * w;
-            int y0 = (v0.y + 1) * h;
-            int x1 = (v1.x + 1) * w;
-            int y1 = (v1.y + 1) * h;
-            line(x0, y0, x1, y1, img, QColor(Qt::white));
-        }
+        drawFace(img, f, QColor(Qt::white));
     }
 
     img = img.mirrored(false, true);
