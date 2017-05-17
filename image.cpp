@@ -91,17 +91,25 @@ void Image::paint()
 {
     int w = img.width() / 2;
     int h = img.height() / 2;
+    Vertex light_dir = {-100, -100, -100};
 
     for (const Face& f : faces) {
-        QVector<Point> points;
-        for (const Vertex& v : f.getVector()) {
-            int x = (v.x + 1.0) * w;
-            int y = (v.y + 1.0) * h;
-            points.push_back( {x, y} );
+        QVector<Vertex> face = f.getVector();
+        Point screen[3];
+        Vertex world[3];
+        for (int j = 0; j < 3; j++) {
+            const Vertex& v = face[j];
+            world[j]  = v;
+            screen[j] = Point((v.x + 1.0) * w, (v.y + 1.0) * h);
         }
 
-        Qt::GlobalColor color = static_cast<Qt::GlobalColor>(rand() % Qt::yellow + 3);
-        drawFace(img, points[0], points[1], points[2], QColor(color));
+        Vertex n = (world[2] - world[0]) ^ (world[1] - world[0]);
+        n.normalize();
+        float intensity = n * light_dir;
+        if (intensity > 0) {
+            QRgb rgb = qRgb(intensity*255, intensity*255, intensity*255);
+            drawFace(img, screen[0], screen[1], screen[2], QColor(rgb));
+        }
     }
 
     img = img.mirrored(false, true);
