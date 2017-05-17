@@ -49,26 +49,59 @@ void Image::setVertices(const std::vector<Vertex> &vertices)
     this->vertices = vertices;
 }
 
-void drawFace(QImage& img, const Face& f, QColor color)
+static void drawFace(QImage& img, Point t0, Point t1, Point t2, QColor color)
 {
-    int w = img.width() / 2;
-    int h = img.height() / 2;
-    QVector<Vertex> face = f.getVector();
-    for (int i=0; i<3; i++) {
-        Vertex v0 = face[i];
-        Vertex v1 = face[(i + 1) % 3];
-        int x0 = (v0.x + 1) * w;
-        int y0 = (v0.y + 1) * h;
-        int x1 = (v1.x + 1) * w;
-        int y1 = (v1.y + 1) * h;
-        line(img, x0, y0, x1, y1, color);
+    if (t0.y == t1.y && t0.y == t2.y) {
+        return;
+    }
+
+    if (t0.y > t1.y) {
+        std::swap(t0, t1);
+    }
+    if (t0.y > t2.y) {
+        std::swap(t0, t2);
+    }
+    if (t1.y > t2.y) {
+        std::swap(t1, t2);
+    }
+
+    int height = t2.y - t0.y;
+    int d1 = t1.y - t0.y;
+    int d2 = t2.y - t1.y;
+    for (int i = 0; i < height; i++) {
+        bool second_half = i > d1 || t1.y == t0.y;
+        int segment_height = second_half ? d2 : d1;
+        float alpha = static_cast<float>(i) / height;
+        float num = second_half ? d1 : 0;
+        float beta = static_cast<float>(i - num) / segment_height;
+        Point a = t0 + (t2 - t0) * alpha;
+        Point b = second_half ? t1 + (t2 - t1) * beta
+                              : t0 + (t1 - t0) * beta;
+        if (a.x > b.x) {
+            std::swap(a, b);
+        }
+
+        for (int j = a.x; j <= b.x; j++) {
+            img.setPixelColor(j, t0.y + i, color); // attention, due to int casts t0.y+i != A.y
+        }
     }
 }
 
 void Image::paint()
 {
+    int w = img.width() / 2;
+    int h = img.height() / 2;
+
     for (const Face& f : faces) {
-        drawFace(img, f, QColor(Qt::white));
+        QVector<Point> points;
+        for (const Vertex& v : f.getVector()) {
+            int x = (v.x + 1.0) * w;
+            int y = (v.y + 1.0) * h;
+            points.push_back( {x, y} );
+        }
+
+        Qt::GlobalColor color = static_cast<Qt::GlobalColor>(rand() % Qt::yellow + 3);
+        drawFace(img, points[0], points[1], points[2], QColor(color));
     }
 
     img = img.mirrored(false, true);

@@ -19,3 +19,16 @@ QVector<Vertex> Face::getVector() const
 {
     return { a, b, c };
 }
+
+Point Point::operator+(Point p) {
+    return { x + p.x, y + p.y };
+}
+
+Point Point::operator-(Point p) {
+    return { x - p.x, y - p.y };
+}
+
+Point Point::operator*(double val) {
+    return { static_cast<int>(x * val),
+             static_cast<int>(y * val) };
+}

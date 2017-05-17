@@ -14,4 +14,11 @@ struct Face {
     Vertex a, b, c;
 };
 
+struct Point {
+    Point operator+(Point p);
+    Point operator-(Point p);
+    Point operator*(double val);
+    int x, y;
+};
+
 #endif // FIGURES_H
