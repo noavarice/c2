@@ -27,6 +27,11 @@ static void round(Vertex& v) {
     v.z = floor(v.z);
 }
 
+static inline bool isValid(const QImage& img, const Vertex& p)
+{
+    return 0 <= p.y && p.y <= img.height() && 0 <= p.x && p.x <= img.width();
+}
+
 static void drawFace(QImage& img, Vertex t0, Vertex t1, Vertex t2, QColor color, int* zbuffer)
 {
     if (t0.y == t1.y && t0.y == t2.y) {
@@ -68,6 +73,10 @@ static void drawFace(QImage& img, Vertex t0, Vertex t1, Vertex t2, QColor color,
             Vertex p = a + (b - a) * phi;
             p.x = j;
             p.y = static_cast<int>(t0.y) + i;
+            if (!isValid(img, p)) {
+                continue;
+            }
+
             int idx = p.x + p.y * img.width();
             if (zbuffer[idx] < p.z) {
                 zbuffer[idx] = p.z;
