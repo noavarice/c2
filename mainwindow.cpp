@@ -41,7 +41,6 @@ MainWindow::MainWindow(QWidget *parent)
     int step = 1;
     faces = buildFigure(r, phi, step);
     img.setFaces(faces);
-    img.setVertices(vertices);
     draw();
 }
 

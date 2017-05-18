@@ -21,11 +21,6 @@ void Image::setFaces(const QVector<Face> &faces)
     this->faces = faces;
 }
 
-void Image::setVertices(const QVector<Vertex> &vertices)
-{
-    this->vertices = vertices;
-}
-
 static void round(Vertex& v) {
     v.x = floor(v.x);
     v.y = floor(v.y);

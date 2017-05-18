@@ -27,7 +27,6 @@ private:
 
 private:
     QImage img;
-    QVector<Vertex> vertices;
     QVector<Face> faces;
     double xRot, yRot, zRot;
     Vertex light {0, 0, -1};
