@@ -37,24 +37,30 @@ MainWindow::MainWindow(QWidget *parent)
 
     img.setFaces(faces);
     img.setVertices(vertices);
-    img.paint();
-    pixmap = QPixmap::fromImage(img.getQImage());
-    ui->image->setPixmap(pixmap);
-
-    QTimer* timer = new QTimer();
-    timer->setInterval(10);
-    timer->start();
-    connect(timer, &QTimer::timeout, [=]() {
-        static double a = 0;
-        a += M_PI / 45;
-        img.setXRot(a);
-        img.paint();
-        pixmap = QPixmap::fromImage(img.getQImage());
-        ui->image->setPixmap(pixmap);
-    });
+    draw();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+
+void MainWindow::draw()
+{
+    img.paint();
+    pixmap = QPixmap::fromImage(img.getQImage());
+    ui->image->setPixmap(pixmap);
+}
+
+#define ROTATE(COMP) \
+void MainWindow::on_s##COMP##Rot_sliderMoved(int position) \
+{ \
+    position -= 180; \
+    img.set##COMP##Rot(position * 2 * M_PI / 360); \
+    draw(); \
+}
+
+ROTATE(X)
+ROTATE(Y)
+ROTATE(Z)

@@ -15,6 +15,12 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void draw();
+
+private slots:
+    void on_sXRot_sliderMoved(int position);
+    void on_sYRot_sliderMoved(int position);
+    void on_sZRot_sliderMoved(int position);
 
 private:
     Ui::MainWindow *ui;
