@@ -2,12 +2,15 @@
 #include "ui_mainwindow.h"
 
 #include <QLabel>
+#include <QTimer>
 #include <fstream>
+#include <cmath>
 #include "image.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
+    , img(800, 800)
 {
     ui->setupUi(this);
     std::ifstream in("/home/diadlo/Pictures/african_head.obj");
@@ -32,12 +35,23 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     }
 
-    Image img(800, 800);
     img.setFaces(faces);
     img.setVertices(vertices);
     img.paint();
     pixmap = QPixmap::fromImage(img.getQImage());
     ui->image->setPixmap(pixmap);
+
+    QTimer* timer = new QTimer();
+    timer->setInterval(10);
+    timer->start();
+    connect(timer, &QTimer::timeout, [=]() {
+        static double a = 0;
+        a += M_PI / 45;
+        img.setYRot(a);
+        img.paint();
+        pixmap = QPixmap::fromImage(img.getQImage());
+        ui->image->setPixmap(pixmap);
+    });
 }
 
 MainWindow::~MainWindow()

@@ -4,6 +4,9 @@
 
 Image::Image(int w, int h)
     : img(w, h, QImage::Format_RGB32)
+    , xRot{0}
+    , yRot{0}
+    , zRot{0}
 {
 
 }
@@ -74,21 +77,36 @@ static void drawFace(QImage& img, Vertex t0, Vertex t1, Vertex t2, QColor color,
     }
 }
 
+Vertex rebase(const Vertex& v, const QVector<Vertex>& base)
+{
+    double x = base[0].x * v.x + base[1].x * v.y + base[2].x * v.z;
+    double y = base[0].y * v.x + base[1].y * v.y + base[2].y * v.z;
+    double z = base[0].z * v.x + base[1].z * v.y + base[2].z * v.z;
+    return {x, y, z};
+}
+
 void Image::paint()
 {
+    img.fill(QColor(Qt::black));
     int* zbuffer = new int[img.width() * img.height()];
     memset(zbuffer, std::numeric_limits<int>::min(), img.width() * img.height() * sizeof(int));
 
     int w = img.width() / 2;
     int h = img.height() / 2;
-    Vertex light_dir = {0, 0, -1};
+    Vertex light_dir {0, 0, -1};
+    QVector<Vertex> base {{sin(yRot + M_PI/2), 0, sin(yRot)},
+                          {0, 1, 0},
+                          {cos(yRot + M_PI/2), 0, cos(yRot)}};
+    for (Vertex& v : base) {
+        v = v.normalize();
+    }
 
     for (const Face& f : faces) {
         QVector<Vertex> face = f.getVector();
         Vertex screen[3];
         Vertex world[3];
         for (int j = 0; j < 3; j++) {
-            const Vertex& v = face[j];
+            Vertex v = rebase(face[j], base);
             world[j]  = v * 100;
             screen[j] = Vertex((v.x + 1.0) * w, (v.y + 1.0) * h, (v.z + 1.0) * 255/2);
         }
@@ -124,4 +142,19 @@ void Image::paint()
 const QImage &Image::getQImage() const
 {
     return img;
+}
+
+void Image::setXRot(double a)
+{
+    xRot = a;
+}
+
+void Image::setYRot(double a)
+{
+    yRot = a;
+}
+
+void Image::setZRot(double a)
+{
+    zRot = a;
 }

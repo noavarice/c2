@@ -14,10 +14,15 @@ public:
     void paint();
     const QImage& getQImage() const;
 
+    void setXRot(double a);
+    void setYRot(double a);
+    void setZRot(double a);
+
 private:
     QImage img;
     std::vector<Vertex> vertices;
     std::vector<Face> faces;
+    double xRot, yRot, zRot;
 };
 
 #endif // IMAGE_H
