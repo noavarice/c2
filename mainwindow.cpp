@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(timer, &QTimer::timeout, [=]() {
         static double a = 0;
         a += M_PI / 45;
-        img.setYRot(a);
+        img.setXRot(a);
         img.paint();
         pixmap = QPixmap::fromImage(img.getQImage());
         ui->image->setPixmap(pixmap);

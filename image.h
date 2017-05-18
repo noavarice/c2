@@ -19,6 +19,9 @@ public:
     void setZRot(double a);
 
 private:
+    QVector<Vertex> getBase();
+
+private:
     QImage img;
     std::vector<Vertex> vertices;
     std::vector<Face> faces;

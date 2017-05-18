@@ -85,21 +85,61 @@ Vertex rebase(const Vertex& v, const QVector<Vertex>& base)
     return {x, y, z};
 }
 
+typedef QVector<QVector<double>> Matrix;
+Matrix mul(const Matrix& a, const Matrix& b)
+{
+    Matrix res = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 3; k++) {
+                res[i][j] += a[i][k] * b[k][j];
+            }
+        }
+    }
+
+    return res;
+}
+
+QVector<Vertex> Image::getBase()
+{
+    double pi2 = M_PI / 2;
+    Matrix base_x {
+        {1, 0, 0},
+        {0, cos(xRot), cos(xRot + pi2)},
+        {0, sin(xRot), sin(xRot + pi2)}
+    };
+
+    Matrix base_y {
+        {sin(yRot + pi2), 0, sin(yRot)},
+        {0, 1, 0},
+        {cos(yRot + pi2), 0, cos(yRot)}
+    };
+
+    Matrix base_z {
+        {cos(zRot), cos(zRot + pi2), 0},
+        {sin(zRot), sin(zRot + pi2), 0},
+        {0, 0, 1},
+    };
+
+    Matrix t = mul(base_x, base_y);
+    Matrix base = mul(t, base_z);
+    return {
+        {base[0][0], base[0][1], base[0][2]},
+        {base[1][0], base[1][1], base[1][2]},
+        {base[2][0], base[2][1], base[2][2]}
+    };
+}
+
 void Image::paint()
 {
     img.fill(QColor(Qt::black));
     int* zbuffer = new int[img.width() * img.height()];
     memset(zbuffer, std::numeric_limits<int>::min(), img.width() * img.height() * sizeof(int));
 
-    int w = img.width() / 2;
-    int h = img.height() / 2;
+    int w = img.width() / 4;
+    int h = img.height() / 4;
     Vertex light_dir {0, 0, -1};
-    QVector<Vertex> base {{sin(yRot + M_PI/2), 0, sin(yRot)},
-                          {0, 1, 0},
-                          {cos(yRot + M_PI/2), 0, cos(yRot)}};
-    for (Vertex& v : base) {
-        v = v.normalize();
-    }
+    QVector<Vertex> base = getBase();
 
     for (const Face& f : faces) {
         QVector<Vertex> face = f.getVector();
@@ -108,7 +148,7 @@ void Image::paint()
         for (int j = 0; j < 3; j++) {
             Vertex v = rebase(face[j], base);
             world[j]  = v * 100;
-            screen[j] = Vertex((v.x + 1.0) * w, (v.y + 1.0) * h, (v.z + 1.0) * 255/2);
+            screen[j] = Vertex((v.x + 2.0) * w, (v.y + 2.0) * h, (v.z + 1.0) * 255/2);
         }
 
         Vertex n = (world[2] - world[0]) ^ (world[1] - world[0]);
