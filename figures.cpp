@@ -16,7 +16,7 @@ Vertex Vertex::operator+(const Vertex& p) const
 
 Vertex Vertex::operator-(const Vertex& p) const
 {
-    return {p.x - x, p.y - y, p.z - z};
+    return {x - p.x, y - p.y, z - p.z};
 }
 
 Vertex Vertex::operator*(double val) const
@@ -26,15 +26,15 @@ Vertex Vertex::operator*(double val) const
 
 double Vertex::operator*(const Vertex& p) const
 {
-    return p.x * x + p.y * y;
+    return p.x * x + p.y * y + p.z * z;
 }
 
 Vertex Vertex::operator^(const Vertex& p) const
 {
-    double x = y * p.z - z * p.y;
-    double y = z * p.x - x * p.z;
-    double z = x * p.y - y * p.x;
-    return { x, y, z };
+    double xn = y * p.z - z * p.y;
+    double yn = z * p.x - x * p.z;
+    double zn = x * p.y - y * p.x;
+    return { xn, yn, zn };
 }
 
 double Vertex::length() const
