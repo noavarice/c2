@@ -16,12 +16,12 @@ Image::~Image()
     delete[] zbuffer;
 }
 
-void Image::setFaces(const std::vector<Face> &faces)
+void Image::setFaces(const QVector<Face> &faces)
 {
     this->faces = faces;
 }
 
-void Image::setVertices(const std::vector<Vertex> &vertices)
+void Image::setVertices(const QVector<Vertex> &vertices)
 {
     this->vertices = vertices;
 }
@@ -140,8 +140,8 @@ void Image::paint()
     img.fill(QColor(Qt::black));
     memset(zbuffer, std::numeric_limits<int>::min(), img.width() * img.height() * sizeof(int));
 
-    int w = img.width() / 4;
-    int h = img.height() / 4;
+    int w = img.width() / 2;
+    int h = img.height() / 2;
     QVector<Vertex> base = getBase();
     Vertex light_dir = light.normalize();
 
@@ -152,7 +152,7 @@ void Image::paint()
         for (int j = 0; j < 3; j++) {
             Vertex v = rebase(face[j], base);
             world[j]  = v * 100;
-            screen[j] = Vertex((v.x + 2.0) * w, (v.y + 2.0) * h, (v.z + 1.0) * 255/2);
+            screen[j] = Vertex((v.x + 1.0) * w, (v.y + 1.0) * h, (v.z + 1.0) * 255/2);
         }
 
         Vertex n = (world[2] - world[0]) ^ (world[1] - world[0]);
@@ -160,6 +160,7 @@ void Image::paint()
         float intensity = n * light_dir;
         if (intensity < 0) {
             intensity = 0;
+            continue;
         }
 
         QRgb rgb = qRgb(intensity * 255, intensity * 255, intensity * 255);

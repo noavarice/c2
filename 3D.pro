@@ -27,10 +27,12 @@ CONFIG += c++11
 SOURCES += main.cpp\
         mainwindow.cpp \
     image.cpp \
-    figures.cpp
+    figures.cpp \
+    figurebuilder.cpp
 
 HEADERS  += mainwindow.h \
     image.h \
-    figures.h
+    figures.h \
+    figurebuilder.h
 
 FORMS    += mainwindow.ui

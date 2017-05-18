@@ -6,6 +6,7 @@
 #include <fstream>
 #include <cmath>
 #include "image.h"
+#include "figurebuilder.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -18,8 +19,8 @@ MainWindow::MainWindow(QWidget *parent)
     Vertex v;
     Face f;
     int a, b, c;
-    std::vector<Vertex> vertices;
-    std::vector<Face> faces;
+    QVector<Vertex> vertices;
+    QVector<Face> faces;
     while (in >> line) {
         if (line == "v") {
             in >> v.x >> v.y >> v.z;
@@ -35,6 +36,10 @@ MainWindow::MainWindow(QWidget *parent)
         }
     }
 
+    double r = 0.5;
+    double phi = 20;
+    int step = 1;
+    faces = buildFigure(r, phi, step);
     img.setFaces(faces);
     img.setVertices(vertices);
     draw();

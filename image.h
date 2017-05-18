@@ -10,8 +10,8 @@ class Image
 public:
     Image(int w, int h);
     ~Image();
-    void setFaces(const std::vector<Face>& faces);
-    void setVertices(const std::vector<Vertex>& vertices);
+    void setFaces(const QVector<Face> &faces);
+    void setVertices(const QVector<Vertex> &vertices);
     void paint();
     const QImage& getQImage() const;
 
@@ -27,8 +27,8 @@ private:
 
 private:
     QImage img;
-    std::vector<Vertex> vertices;
-    std::vector<Face> faces;
+    QVector<Vertex> vertices;
+    QVector<Face> faces;
     double xRot, yRot, zRot;
     Vertex light {0, 0, -1};
     int* zbuffer;
