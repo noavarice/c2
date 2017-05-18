@@ -7,8 +7,13 @@ Image::Image(int w, int h)
     , xRot{0}
     , yRot{0}
     , zRot{0}
+    , zbuffer{new int[img.width() * img.height()]}
 {
+}
 
+Image::~Image()
+{
+    delete[] zbuffer;
 }
 
 void Image::setFaces(const std::vector<Face> &faces)
@@ -133,13 +138,12 @@ QVector<Vertex> Image::getBase()
 void Image::paint()
 {
     img.fill(QColor(Qt::black));
-    int* zbuffer = new int[img.width() * img.height()];
     memset(zbuffer, std::numeric_limits<int>::min(), img.width() * img.height() * sizeof(int));
 
     int w = img.width() / 4;
     int h = img.height() / 4;
-    Vertex light_dir {0, 0, -1};
     QVector<Vertex> base = getBase();
+    Vertex light_dir = light.normalize();
 
     for (const Face& f : faces) {
         QVector<Vertex> face = f.getVector();
@@ -154,10 +158,12 @@ void Image::paint()
         Vertex n = (world[2] - world[0]) ^ (world[1] - world[0]);
         n = n.normalize();
         float intensity = n * light_dir;
-        if (intensity > 0) {
-            QRgb rgb = qRgb(intensity*255, intensity*255, intensity*255);
-            drawFace(img, screen[0], screen[1], screen[2], QColor(rgb), zbuffer);
+        if (intensity < 0) {
+            intensity = 0;
         }
+
+        QRgb rgb = qRgb(intensity * 255, intensity * 255, intensity * 255);
+        drawFace(img, screen[0], screen[1], screen[2], QColor(rgb), zbuffer);
     }
 
     { // dump z-buffer (debugging purposes only)
@@ -176,7 +182,6 @@ void Image::paint()
 
     img = img.mirrored(false, true);
     img.save("out.jpg");
-    delete[] zbuffer;
 }
 
 const QImage &Image::getQImage() const
@@ -197,4 +202,14 @@ void Image::setYRot(double a)
 void Image::setZRot(double a)
 {
     zRot = a;
+}
+
+const Vertex &Image::getLight() const
+{
+    return light;
+}
+
+void Image::setLight(const Vertex& p)
+{
+    light = p;
 }

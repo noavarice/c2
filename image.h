@@ -9,6 +9,7 @@ class Image
 {
 public:
     Image(int w, int h);
+    ~Image();
     void setFaces(const std::vector<Face>& faces);
     void setVertices(const std::vector<Vertex>& vertices);
     void paint();
@@ -18,6 +19,9 @@ public:
     void setYRot(double a);
     void setZRot(double a);
 
+    void setLight(const Vertex& p);
+    const Vertex& getLight() const;
+
 private:
     QVector<Vertex> getBase();
 
@@ -26,6 +30,8 @@ private:
     std::vector<Vertex> vertices;
     std::vector<Face> faces;
     double xRot, yRot, zRot;
+    Vertex light {0, 0, -1};
+    int* zbuffer;
 };
 
 #endif // IMAGE_H

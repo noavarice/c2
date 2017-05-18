@@ -64,3 +64,16 @@ void MainWindow::on_s##COMP##Rot_sliderMoved(int position) \
 ROTATE(X)
 ROTATE(Y)
 ROTATE(Z)
+
+#define LIGHT(X, xo) \
+void MainWindow::on_sbLight##X##_valueChanged(int val) \
+{ \
+    Vertex v = img.getLight(); \
+    v.xo = val; \
+    img.setLight(v); \
+    draw(); \
+}
+
+LIGHT(X, x)
+LIGHT(Y, y)
+LIGHT(Z, z)

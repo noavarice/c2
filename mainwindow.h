@@ -22,6 +22,10 @@ private slots:
     void on_sYRot_sliderMoved(int position);
     void on_sZRot_sliderMoved(int position);
 
+    void on_sbLightX_valueChanged(int val);
+    void on_sbLightY_valueChanged(int val);
+    void on_sbLightZ_valueChanged(int val);
+
 private:
     Ui::MainWindow *ui;
     Image img;
