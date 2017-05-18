@@ -166,22 +166,7 @@ void Image::paint()
         drawFace(img, screen[0], screen[1], screen[2], QColor(rgb), zbuffer);
     }
 
-    { // dump z-buffer (debugging purposes only)
-        QImage zimage(img.width(), img.height(), QImage::Format_RGB32);
-        for (int i = 0; i < img.width(); i++) {
-            for (int j = 0; j < img.height(); j++) {
-                int val = zbuffer[i+j*img.width()];
-                QColor c(qRgb(val, val, val));
-                zimage.setPixelColor(i, j, c);
-            }
-        }
-
-        zimage = zimage.mirrored(false, true);
-        zimage.save("zbuffer.jpg");
-    }
-
     img = img.mirrored(false, true);
-    img.save("out.jpg");
 }
 
 const QImage &Image::getQImage() const
