@@ -18,6 +18,12 @@ void Image::setVertices(const std::vector<Vertex> &vertices)
     this->vertices = vertices;
 }
 
+static void round(Vertex& v) {
+    v.x = floor(v.x);
+    v.y = floor(v.y);
+    v.z = floor(v.z);
+}
+
 static void drawFace(QImage& img, Vertex t0, Vertex t1, Vertex t2, QColor color, int* zbuffer)
 {
     if (t0.y == t1.y && t0.y == t2.y) {
@@ -34,6 +40,9 @@ static void drawFace(QImage& img, Vertex t0, Vertex t1, Vertex t2, QColor color,
         std::swap(t1, t2);
     }
 
+    round(t0);
+    round(t1);
+    round(t2);
     double height = t2.y - t0.y;
     double d1 = t1.y - t0.y;
     double d2 = t2.y - t1.y;
