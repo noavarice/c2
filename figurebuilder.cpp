@@ -11,10 +11,11 @@ void addFace(QVector<Face>& faces, Face f)
 
 QVector<Face> buildFigure(double r, double phi, int step)
 {
-    QVector<QVector<Vertex>> points(180 / step);
-    for (int i = 0; i < 180 / step; i++) {
+    QVector<QVector<Vertex>> points;
+    for (int i = 0; i <= 180 / step; i++) {
+        points.push_back({});
         QVector<Vertex>& line = points[i];
-        for (int j = 0; j < phi / step; j++) {
+        for (int j = 0; j <= phi / step; j++) {
             double a = i * step * M_PI / 180;
             double b = j * step * M_PI / 180;
             Vertex v {

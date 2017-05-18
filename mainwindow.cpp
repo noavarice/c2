@@ -3,6 +3,8 @@
 
 #include <QLabel>
 #include <QTimer>
+#include <QSlider>
+#include <QSpinBox>
 #include <cmath>
 #include "image.h"
 #include "figurebuilder.h"
@@ -13,12 +15,10 @@ MainWindow::MainWindow(QWidget *parent)
     , img(800, 800)
 {
     ui->setupUi(this);
-    double r = 0.5;
-    double phi = 20;
-    int step = 1;
-    QVector<Face> faces = buildFigure(r, phi, step);
-    img.setFaces(faces);
-    draw();
+    ui->sQuality->setValue(ui->sQuality->maximum() - step + 1);
+    ui->sbPhi->setValue(phi);
+    ui->sbR->setValue(r);
+    build();
 }
 
 MainWindow::~MainWindow()
@@ -26,12 +26,17 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
 void MainWindow::draw()
 {
     img.paint();
     pixmap = QPixmap::fromImage(img.getQImage());
     ui->image->setPixmap(pixmap);
+}
+
+void MainWindow::build()
+{
+    img.setFaces(buildFigure(r, phi, step));
+    draw();
 }
 
 #define ROTATE(COMP) \
@@ -58,3 +63,21 @@ void MainWindow::on_sbLight##X##_valueChanged(int val) \
 LIGHT(X, x)
 LIGHT(Y, y)
 LIGHT(Z, z)
+
+void MainWindow::on_sQuality_sliderMoved(int position)
+{
+    step = ui->sQuality->maximum() - position + 1;
+    build();
+}
+
+void MainWindow::on_sbR_valueChanged(double val)
+{
+    r = val;
+    build();
+}
+
+void MainWindow::on_sbPhi_valueChanged(int val)
+{
+    phi = val;
+    build();
+}
