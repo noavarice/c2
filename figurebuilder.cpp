@@ -1,6 +1,7 @@
 #include "figurebuilder.h"
 
 #include <cmath>
+#include <fstream>
 
 void addFace(QVector<Face>& faces, Face f)
 {
@@ -38,6 +39,32 @@ QVector<Face> buildFigure(double r, double phi, int step)
                 points[i][j + 1],
                 points[i + 1][j]
             });
+        }
+    }
+
+    return faces;
+}
+
+QVector<Face> loadModel(std::string filename)
+{
+    std::ifstream in(filename);
+    std::string line;
+    QVector<Vertex> vertices;
+    QVector<Face> faces;
+    while (in >> line) {
+        if (line == "v") {
+            Vertex v;
+            in >> v.x >> v.y >> v.z;
+            vertices.push_back(v);
+        } else if (line == "f") {
+            int a, b, c;
+            in >> a >> line >> b >> line >> c >> line;
+            faces.push_back({vertices[a - 1], vertices[b - 1], vertices[c - 1]});
+        } else if (line == "vt" || line == "vn" || line == "g" || line == "s") {
+            // skip
+            std::getline(in, line);
+        } else {
+            std::getline(in, line);
         }
     }
 
