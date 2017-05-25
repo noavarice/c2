@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>420</width>
+    <height>307</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,6 +24,9 @@
     </item>
     <item>
      <layout class="QFormLayout" name="formLayout">
+      <property name="formAlignment">
+       <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+      </property>
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
@@ -51,13 +54,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Z rot</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="1">
        <widget class="QSlider" name="sYRot">
         <property name="maximum">
@@ -68,6 +64,13 @@
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Z rot</string>
         </property>
        </widget>
       </item>
@@ -91,24 +94,17 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>Light y</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Light z</string>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="1">
        <widget class="QSpinBox" name="sbLightX">
         <property name="minimum">
          <number>-99</number>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Light y</string>
         </property>
        </widget>
       </item>
@@ -119,6 +115,13 @@
         </property>
        </widget>
       </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Light z</string>
+        </property>
+       </widget>
+      </item>
       <item row="5" column="1">
        <widget class="QSpinBox" name="sbLightZ">
         <property name="minimum">
@@ -126,54 +129,63 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>R</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="0">
-       <widget class="QLabel" name="label_8">
-        <property name="text">
-         <string>phi</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="0">
-       <widget class="QLabel" name="label_9">
-        <property name="text">
-         <string>Quality</string>
-        </property>
-       </widget>
-      </item>
       <item row="6" column="1">
-       <widget class="QDoubleSpinBox" name="sbR">
+       <widget class="QDoubleSpinBox" name="doubleSpinBoxHeight">
+        <property name="decimals">
+         <number>2</number>
+        </property>
+        <property name="minimum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>2.000000000000000</double>
+        </property>
         <property name="singleStep">
-         <double>0.020000000000000</double>
+         <double>0.100000000000000</double>
         </property>
        </widget>
       </item>
       <item row="7" column="1">
-       <widget class="QSpinBox" name="sbPhi">
+       <widget class="QDoubleSpinBox" name="doubleSpinBoxRadius">
+        <property name="minimum">
+         <double>1.000000000000000</double>
+        </property>
         <property name="maximum">
-         <number>360</number>
+         <double>2.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
         </property>
        </widget>
       </item>
       <item row="8" column="1">
-       <widget class="QSlider" name="sQuality">
+       <widget class="QSpinBox" name="spinBoxSidesCount">
         <property name="minimum">
-         <number>1</number>
+         <number>3</number>
         </property>
         <property name="maximum">
-         <number>19</number>
+         <number>20</number>
         </property>
-        <property name="value">
-         <number>10</number>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="labelHeight">
+        <property name="text">
+         <string>Height</string>
         </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="labelRadius">
+        <property name="text">
+         <string>Bottom radius</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="labelSidesCount">
+        <property name="text">
+         <string>Sides count</string>
         </property>
        </widget>
       </item>

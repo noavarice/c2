@@ -13,11 +13,11 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , img(800, 800)
+    , height{1.0}
+    , radius{1.0}
+    , sidesCount{3}
 {
     ui->setupUi(this);
-    ui->sQuality->setValue(ui->sQuality->maximum() - step + 1);
-    ui->sbPhi->setValue(phi);
-    ui->sbR->setValue(r);
     build();
 }
 
@@ -35,7 +35,7 @@ void MainWindow::draw()
 
 void MainWindow::build()
 {
-    img.setFaces(buildFigure(r, phi, step));
+    img.setFaces(buildFigure(height, sidesCount, radius));
     draw();
 }
 
@@ -64,20 +64,20 @@ LIGHT(X, x)
 LIGHT(Y, y)
 LIGHT(Z, z)
 
-void MainWindow::on_sQuality_sliderMoved(int position)
+void MainWindow::on_doubleSpinBoxHeight_valueChanged(double newHeight)
 {
-    step = ui->sQuality->maximum() - position + 1;
+    height = newHeight;
     build();
 }
 
-void MainWindow::on_sbR_valueChanged(double val)
+void MainWindow::on_doubleSpinBoxRadius_valueChanged(double newRadius)
 {
-    r = val;
+    radius = newRadius;
     build();
 }
 
-void MainWindow::on_sbPhi_valueChanged(int val)
+void MainWindow::on_spinBoxSidesCount_valueChanged(int newSidesCount)
 {
-    phi = val;
+    sidesCount = newSidesCount;
     build();
 }

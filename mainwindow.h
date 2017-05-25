@@ -27,20 +27,20 @@ private slots:
     void on_sbLightY_valueChanged(int val);
     void on_sbLightZ_valueChanged(int val);
 
-    void on_sQuality_sliderMoved(int position);
+    void on_doubleSpinBoxHeight_valueChanged(double newHeight);
 
-    void on_sbR_valueChanged(double arg1);
+    void on_doubleSpinBoxRadius_valueChanged(double newRadius);
 
-    void on_sbPhi_valueChanged(int arg1);
+    void on_spinBoxSidesCount_valueChanged(int newSidesCount);
 
 private:
-    double r = 0.5;
-    double phi = 20;
-    int step = 1;
-
     Ui::MainWindow *ui;
     Image img;
     QPixmap pixmap;
+
+    double height;
+    double radius;
+    int sidesCount;
 };
 
 #endif // MAINWINDOW_H

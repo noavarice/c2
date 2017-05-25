@@ -9,38 +9,24 @@ void addFace(QVector<Face>& faces, Face f)
     faces.push_back({f.a, f.c, f.b});
 }
 
-QVector<Face> buildFigure(double r, double phi, int step)
+QVector<Face> buildFigure(double height, int sidesCount, double radius)
 {
-    QVector<QVector<Vertex>> points;
-    for (int i = 0; i <= 180 / step; i++) {
-        points.push_back({});
-        QVector<Vertex>& line = points[i];
-        for (int j = 0; j <= phi / step; j++) {
-            double a = i * step * M_PI / 180;
-            double b = j * step * M_PI / 180;
-            Vertex v {
-                r * sin(a) * cos(b),
-                r * sin(a) * sin(b),
-                r * cos(a)
-            };
-            line.push_back(v);
-        }
-    }
-
+    const Vertex start{0.0, 0.0, 0.0};
+    const Vertex top{0.0, 0.0, height};
+    double angleStep = M_PI * 2 / sidesCount;
+    double currentAngle = 0.0;
+    Vertex currentVertex{radius, 0.0, 0.0};
     QVector<Face> faces;
-    for (int i = 0; i < points.size() - 1; i++) {
-        for (int j = 0; j < points[0].size() - 1; j++) {
-            addFace(faces, {
-                points[i][j],
-                points[i][j + 1],
-                points[i + 1][j]
-            });
-            addFace(faces, {
-                points[i + 1][j + 1],
-                points[i][j + 1],
-                points[i + 1][j]
-            });
-        }
+    for (int i = 0; i < sidesCount; ++i) {
+        currentAngle += angleStep;
+        Vertex nextVertex{
+            cos(currentAngle) * radius,
+            sin(currentAngle) * radius,
+            0.0
+        };
+        addFace(faces, {start, currentVertex, nextVertex});
+        addFace(faces, {top, currentVertex, nextVertex});
+        currentVertex = nextVertex;
     }
 
     return faces;
