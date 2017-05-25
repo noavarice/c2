@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
     , img(800, 800)
     , height{1.0}
-    , radius{1.0}
+    , radius{0.3}
     , sidesCount{3}
 {
     ui->setupUi(this);
