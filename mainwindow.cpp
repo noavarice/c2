@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , img(800, 800)
-    , height{1.0}
+    , height{0.3}
     , radius{0.3}
     , sidesCount{3}
 {
